@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  back2:
+    image: melissapanduro/backprs2
+    ports:
+      - "8085:8085"
+    environment:
+      DATABASE_URL: r2dbc:postgresql://neondb_owner:o0jzHvOclyh7@ep-old-surf-a5b1zjoi.us-east-2.aws.neon.tech/neondb?sslmode=require
+      DATABASE_USERNAME: neondb_owner
+      DATABASE_PASSWORD: o0jzHvOclyh7
+  front2:
+    image: melissapanduro/frontprs2
+    ports:
+      - "4200:4200"
+    environment:
+      API_BACKEND: https://supreme-space-guacamole-7vrx775qpr96hr97x-8085.app.github.dev/api/productos

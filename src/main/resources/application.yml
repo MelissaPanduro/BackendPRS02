@@ -1,0 +1,11 @@
+server:
+  port: 8085
+spring:
+  application:
+    name: ProductNPH
+
+  r2dbc:
+        url: r2dbc:pool:postgresql://aws-0-us-west-1.pooler.supabase.com:5432/postgres
+        username: postgres.tuuxndxyhvjrnvqkgrma
+        password: UpfA3yGIo7CFFLyK
+        
