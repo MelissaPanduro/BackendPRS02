@@ -4,7 +4,8 @@ pipeline {
     stages {
         stage('Clonar repositorio') {
             steps {
-                git 'https://github.com/MelissaPanduro/BackendPRS02.git'
+                // Indica la rama develop explícitamente
+                git branch: 'develop', url: 'https://github.com/MelissaPanduro/BackendPRS02.git'
             }
         }
 
