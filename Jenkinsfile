@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     tools {
-        maven 'Maven 3.8.7' // Usa el nombre del Maven que configuraste en Jenkins
+        maven 'Maven 3.8.7' // Debe coincidir con el nombre configurado en Jenkins
     }
 
     stages {
@@ -24,6 +24,14 @@ pipeline {
             }
         }
 
+        stage('Análisis SonarQube') {
+            steps {
+                withSonarQubeEnv('SonarQube') { // El nombre debe coincidir con el configurado en Jenkins
+                    sh 'mvn sonar:sonar -Dsonar.projectKey=BackendPRS02 -Dsonar.sources=src -Dsonar.java.binaries=target'
+                }
+            }
+        }
+
         stage('Generar artefacto .jar') {
             steps {
                 sh 'mvn package'
@@ -33,10 +41,10 @@ pipeline {
 
     post {
         success {
-            echo '¡Construcción exitosa! Artefacto generado.'
+            echo '¡Construcción exitosa! Artefacto generado y análisis completado.'
         }
         failure {
-            echo 'La construcción falló.'
+            echo 'La construcción falló o el análisis falló.'
         }
     }
 }
