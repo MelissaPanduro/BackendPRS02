@@ -1,8 +1,13 @@
 pipeline {
     agent any
 
+    environment {
+        SONAR_TOKEN = credentials('SONAR_TOKEN') // ID de la credencial secreta de texto que guardaste en Jenkins
+    }
+
     tools {
-        maven 'Maven 3.8.7' // Debe coincidir con el nombre configurado en Jenkins
+        git 'DefaultGit'               // Herramienta Git configurada en Jenkins
+        maven 'Maven 3.8.7'            // Debe coincidir con el nombre configurado en Jenkins
     }
 
     stages {
@@ -26,8 +31,14 @@ pipeline {
 
         stage('Análisis SonarQube') {
             steps {
-                withSonarQubeEnv('SonarQube') { // El nombre debe coincidir con el configurado en Jenkins
-                    sh 'mvn sonar:sonar -Dsonar.projectKey=BackendPRS02 -Dsonar.sources=src -Dsonar.java.binaries=target'
+                withSonarQubeEnv('SonarQube') { // Asegúrate que "SonarQube" sea el nombre configurado en Jenkins
+                    sh '''
+                        mvn sonar:sonar \
+                        -Dsonar.projectKey=BackendPRS02 \
+                        -Dsonar.sources=src \
+                        -Dsonar.java.binaries=target \
+                        -Dsonar.login=${SONAR_TOKEN}
+                    '''
                 }
             }
         }
