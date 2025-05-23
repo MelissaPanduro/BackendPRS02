@@ -37,7 +37,8 @@ pipeline {
                         -Dsonar.sources=src/main/java \
                         -Dsonar.tests=src/test/java \
                         -Dsonar.java.binaries=target \
-                        -Dsonar.token=${SONAR_TOKEN}
+                        -Dsonar.token=${SONAR_TOKEN} \
+                        -Dsonar.branch.name=develop
                     '''
                 }
             }
