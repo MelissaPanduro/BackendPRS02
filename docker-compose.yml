@@ -1,17 +1,35 @@
-version: '3'
+version: '3.8'
 
 services:
-  back2:
-    image: melissapanduro/backprs2
+  sonarqube:
+    image: sonarqube:latest
+    container_name: sonarqube
     ports:
-      - "8085:8085"
+      - "9000:9000"
     environment:
-      DATABASE_URL: r2dbc:postgresql://neondb_owner:o0jzHvOclyh7@ep-old-surf-a5b1zjoi.us-east-2.aws.neon.tech/neondb?sslmode=require
-      DATABASE_USERNAME: neondb_owner
-      DATABASE_PASSWORD: o0jzHvOclyh7
-  front2:
-    image: melissapanduro/frontprs2
+      - SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true
+    volumes:
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_extensions:/opt/sonarqube/extensions
+    networks:
+      - ci-network
+
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: jenkins
     ports:
-      - "4200:4200"
-    environment:
-      API_BACKEND: https://supreme-space-guacamole-7vrx775qpr96hr97x-8085.app.github.dev/api/productos
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+    networks:
+      - ci-network
+
+volumes:
+  jenkins_home:
+  sonarqube_data:
+  sonarqube_extensions:
+
+networks:
+  ci-network:
+    driver: bridge
