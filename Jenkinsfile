@@ -2,11 +2,12 @@ pipeline {
     agent any
 
     environment {
-        SONAR_TOKEN = credentials('SONAR_TOKEN') // Asegúrate de que esta credencial exista
+        SONAR_TOKEN = credentials('SONAR_TOKEN') // Asegúrate que esta credencial existe en Jenkins
     }
 
     tools {
-        maven 'Maven 3.8.7'
+        jdk 'jdk11'               // Cambia 'jdk11' por el nombre que tienes configurado en Jenkins para el JDK
+        maven 'Maven 3.8.7'      // Cambia 'Maven 3.8.7' por el nombre de tu configuración Maven en Jenkins
     }
 
     stages {
@@ -22,6 +23,12 @@ pipeline {
                     env.BRANCH_NAME = sh(script: "git rev-parse --abbrev-ref HEAD", returnStdout: true).trim()
                     echo "🟢 Rama actual: ${env.BRANCH_NAME}"
                 }
+            }
+        }
+
+        stage('Verificar versión de Java') {
+            steps {
+                sh 'java -version'  // Verifica que Jenkins esté usando el JDK correcto
             }
         }
 
@@ -61,7 +68,6 @@ pipeline {
                     def newJarName = jarName.replace(".jar", "-${env.BRANCH_NAME}.jar")
                     sh "mv ${jarName} ${newJarName}"
                     echo "📦 Artefacto renombrado: ${newJarName}"
-                    // Guardar el nombre para usarlo en archiveArtifacts
                     env.RENAMED_JAR = newJarName
                 }
                 archiveArtifacts artifacts: "${env.RENAMED_JAR}", fingerprint: true
