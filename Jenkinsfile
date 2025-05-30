@@ -21,8 +21,8 @@ pipeline {
         stage('Obtener rama actual') {
             steps {
                 script {
-                    env.BRANCH_NAME = sh(script: "git rev-parse --abbrev-ref HEAD", returnStdout: true).trim()
-                    echo "🟢 Rama actual: ${env.BRANCH_NAME}"
+                    env.develop = sh(script: "git rev-parse --abbrev-ref HEAD", returnStdout: true).trim()
+                    echo "🟢 Rama actual: ${env.develop}"
                 }
             }
         }
