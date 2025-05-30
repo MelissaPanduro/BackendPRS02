@@ -7,6 +7,7 @@ pipeline {
 
     tools {
         
+        jdk 'jdk17'
         maven 'Maven 3.8.7'      // Cambia 'Maven 3.8.7' por el nombre de tu configuración Maven en Jenkins
     }
 
